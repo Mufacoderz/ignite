@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  exercises      Exercise[]
+  workoutPlans   WorkoutPlan[]
+  checklistItems ChecklistItem[]
+}
+
+model Exercise {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  name        String
+  muscleGroup String?
+  category    Category @default(strength)
+  sets        Int      @default(3)
+  reps        Int      @default(10)
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planExercises  PlanExercise[]
+  checklistItems ChecklistItem[]
+}
+
+enum Category {
+  strength
+  cardio
+  flexibility
+  balance
+}
+
+model WorkoutPlan {
+  id            Int     @id @default(autoincrement())
+  userId        Int
+  name          String
+  description   String? @db.Text
+  scheduledDate DateTime?
+  dayOfWeek     DayOfWeek?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises PlanExercise[]
+}
+
+enum DayOfWeek {
+  Mon
+  Tue
+  Wed
+  Thu
+  Fri
+  Sat
+  Sun
+}
+
+model PlanExercise {
+  id         Int  @id @default(autoincrement())
+  planId     Int
+  exerciseId Int
+  orderIndex Int  @default(0)
+  customSets Int?
+  customReps Int?
+
+  plan     WorkoutPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  exercise Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+}
+
+model ChecklistItem {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  exerciseId  Int
+  planId      Int?
+  date        DateTime  @db.Date
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  notes       String?   @db.Text
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+}
