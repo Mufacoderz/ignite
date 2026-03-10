@@ -171,15 +171,15 @@ if (!user) return null
             <h2 className="font-display text-xl tracking-wider text-stone-400 mb-3">QUICK ACTIONS</h2>
             <div className="flex flex-wrap gap-2">
               {[
-                { href: '/exercises', label: '+ Exercise', icon: '💪' },
-                { href: '/plans', label: 'New Plan', icon: '📋' },
-                { href: '/checklist', label: 'Start Workout', icon: '✅' },
-                { href: '/stats', label: 'View Stats', icon: '📊' },
-              ].map(({ href, label, icon }) => (
+                { href: '/exercises', label: '+ Exercise' },
+                { href: '/plans', label: 'New Plan' },
+                { href: '/checklist', label: 'Start Workout' },
+                { href: '/stats', label: 'View Stats' },
+              ].map(({ href, label }) => (
                 <Link key={href} href={href}>
                   <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}
                     className="flex items-center gap-2 bg-stone-800/60 border border-stone-700/40 hover:border-ember-700/50 text-stone-300 hover:text-white text-sm font-bold px-4 py-2 rounded-xl transition-all cursor-pointer">
-                    <span>{icon}</span> {label}
+                    {label}
                   </motion.div>
                 </Link>
               ))}

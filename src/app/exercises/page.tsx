@@ -11,8 +11,8 @@ import Button from '@/components/Button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Pencil, Trash2, Dumbbell, Layers, Search } from 'lucide-react'
 
-const CATEGORIES = ['strength','cardio','flexibility','balance']
-const MUSCLES = ['Chest','Back','Shoulders','Biceps','Triceps','Core','Legs','Glutes','Full Body']
+const CATEGORIES = ['strength', 'cardio', 'flexibility', 'balance']
+const MUSCLES = ['Chest', 'Back', 'Shoulders', 'Biceps', 'Triceps', 'Core', 'Legs', 'Glutes', 'Full Body']
 const TAG_COLORS: Record<string, string> = {
   strength: 'bg-red-950/60 text-red-400 border-red-900/40',
   cardio: 'bg-orange-950/60 text-orange-400 border-orange-900/40',
@@ -40,20 +40,20 @@ function ExerciseForm({ exercise, onSave, onClose }: any) {
       {error && <div className="bg-red-950/50 border border-red-800/40 text-red-400 text-sm px-3 py-2 rounded-lg">{error}</div>}
       <div>
         <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-2">Exercise Name *</label>
-        <input required value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="e.g. Bench Press"
+        <input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Bench Press"
           className="w-full bg-stone-800/60 border border-stone-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-ember-600 transition-all" />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-2">Category</label>
-          <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}
+          <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}
             className="w-full bg-stone-800/60 border border-stone-700/50 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-ember-600 transition-all">
-            {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase()+c.slice(1)}</option>)}
+            {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
           </select>
         </div>
         <div>
           <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-2">Muscle Group</label>
-          <select value={form.muscleGroup} onChange={e => setForm({...form, muscleGroup: e.target.value})}
+          <select value={form.muscleGroup} onChange={e => setForm({ ...form, muscleGroup: e.target.value })}
             className="w-full bg-stone-800/60 border border-stone-700/50 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-ember-600 transition-all">
             <option value="">Select...</option>
             {MUSCLES.map(m => <option key={m} value={m}>{m}</option>)}
@@ -63,18 +63,18 @@ function ExerciseForm({ exercise, onSave, onClose }: any) {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-2">Sets</label>
-          <input type="number" min="1" value={form.sets || ''} onChange={e => setForm({...form, sets: e.target.value === '' ? 0 : +e.target.value})}
+          <input type="number" min="1" value={form.sets || ''} onChange={e => setForm({ ...form, sets: e.target.value === '' ? 0 : +e.target.value })}
             className="w-full bg-stone-800/60 border border-stone-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-ember-600 transition-all" />
         </div>
         <div>
           <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-2">Reps</label>
-          <input type="number" min="1" value={form.reps || ''} onChange={e => setForm({...form, reps: e.target.value === '' ? 0 : +e.target.value})}
+          <input type="number" min="1" value={form.reps || ''} onChange={e => setForm({ ...form, reps: e.target.value === '' ? 0 : +e.target.value })}
             className="w-full bg-stone-800/60 border border-stone-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-ember-600 transition-all" />
         </div>
       </div>
       <div>
         <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-2">Notes</label>
-        <textarea value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} rows={3}
+        <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} rows={3}
           placeholder="Tips, variations..." className="w-full bg-stone-800/60 border border-stone-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-ember-600 transition-all resize-none" />
       </div>
       <div className="flex justify-end gap-2 pt-1">
@@ -116,7 +116,7 @@ export default function ExercisesPage() {
 
   const filtered = exercises.filter(ex => {
     const s = search.toLowerCase()
-    return (ex.name.toLowerCase().includes(s) || (ex.muscleGroup||'').toLowerCase().includes(s)) &&
+    return (ex.name.toLowerCase().includes(s) || (ex.muscleGroup || '').toLowerCase().includes(s)) &&
       (filterCat === 'all' || ex.category === filterCat)
   })
 
@@ -143,13 +143,22 @@ export default function ExercisesPage() {
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search exercises..."
                 className="bg-stone-800/60 border border-stone-700/50 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-stone-600 focus:outline-none focus:border-ember-600 transition-all w-52" />
             </div>
-            <div className="flex gap-1.5 bg-stone-900 border border-stone-700/50 rounded-xl p-1">
+            <div className="flex gap-1.5 bg-stone-900 border border-stone-700/50 rounded-xl p-1 relative">
               {['all', ...CATEGORIES].map(cat => (
                 <button key={cat} onClick={() => setFilterCat(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
-                    filterCat === cat ? 'bg-fire-grad text-white shadow-fire' : 'text-stone-500 hover:text-stone-300'
-                  }`}>
-                  {cat}
+                  className="relative px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-colors z-10"
+                  style={{ color: filterCat === cat ? 'white' : '' }}>
+                  {filterCat === cat && (
+                    <motion.div
+                      layoutId="cat-pill"
+                      className="absolute inset-0 rounded-lg bg-fire-grad shadow-fire"
+                      transition={{ type: 'spring', bounce: 0.25, duration: 0.4 }}
+                      style={{ zIndex: -1 }}
+                    />
+                  )}
+                  <span className={filterCat === cat ? 'text-white' : 'text-stone-500 hover:text-stone-300'}>
+                    {cat}
+                  </span>
                 </button>
               ))}
             </div>
