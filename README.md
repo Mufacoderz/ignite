@@ -1,4 +1,4 @@
-# DailyFit — Next.js Stack
+# Mufit Daily
 
 **Tech:** Next.js 14 App Router · TypeScript · Tailwind CSS · Prisma · MySQL · Framer Motion · JWT
 
