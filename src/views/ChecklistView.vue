@@ -28,7 +28,7 @@
         <div class="h-2.5 bg-stone-800 rounded-full overflow-hidden">
           <div class="h-full bg-fire-grad rounded-full transition-all duration-600" :style="`width:${pct}%`"></div>
         </div>
-        <p v-if="pct === 100" class="text-center text-xs font-bold text-amber-500 mt-2">WORKOUT COMPLETE! CRUSHING IT! 🔥</p>
+        <p v-if="pct === 100" class="text-center text-xs font-bold text-amber-500 mt-2">WORKOUT COMPLETE!</p>
       </div>
 
       <!-- Actions -->

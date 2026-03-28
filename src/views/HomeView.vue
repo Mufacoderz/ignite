@@ -29,7 +29,7 @@
         <div class="h-2.5 bg-stone-800 rounded-full overflow-hidden mb-3">
           <div class="h-full bg-fire-grad rounded-full transition-all duration-700" :style="`width:${pct}%`"></div>
         </div>
-        <p v-if="pct === 100" class="text-xs font-bold text-amber-400 text-center">🔥 WORKOUT COMPLETE! CRUSHING IT!</p>
+        <p v-if="pct === 100" class="text-xs font-bold text-amber-400 text-center">WORKOUT COMPLETE!</p>
         <p v-else class="text-xs text-stone-500">{{ today.done }}/{{ today.total }} exercise selesai</p>
       </div>
 
@@ -108,7 +108,7 @@ const pct = computed(() => {
 })
 
 const statCards = computed(() => [
-  { icon: Flame,      value: stats.value?.streak ?? 0,         label: 'Day Streak 🔥' },
+  { icon: Flame,      value: stats.value?.streak ?? 0,         label: 'Day Streak' },
   { icon: Dumbbell,   value: stats.value?.totalExercises ?? 0,  label: 'Total Exercises' },
   { icon: Calendar,   value: stats.value?.totalWorkoutDays ?? 0,label: 'Workout Days' },
   { icon: TrendingUp, value: (stats.value?.completionRate ?? 0)+'%', label: 'Completion Rate' },
