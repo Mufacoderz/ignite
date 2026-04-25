@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ==================== USER ====================
@@ -41,18 +42,16 @@ model Exercise {
   name            String
   category        ExerciseCategory
   type            ExerciseType
-
   reps            Int?
   sets            Int?
   durationSeconds Int?
   timeSets        Int?
-
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  planItems       PlanItem[]
-  logItems        DailyLogItem[]
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planItems PlanItem[]
+  logItems  DailyLogItem[]
 }
 
 // ==================== PLAN ====================
@@ -64,8 +63,8 @@ model Plan {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items       PlanItem[]
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items PlanItem[]
 }
 
 model PlanItem {
@@ -74,19 +73,19 @@ model PlanItem {
   exerciseId String
   order      Int
 
-  plan       Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
-  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  plan     Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 }
 
 // ==================== DAILY LOG ====================
 model DailyLog {
-  id        String         @id @default(cuid())
+  id        String   @id @default(cuid())
   userId    String
-  date      DateTime
-  createdAt DateTime       @default(now())
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
 
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     DailyLogItem[]
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items DailyLogItem[]
 
   @@unique([userId, date])
 }
@@ -99,6 +98,6 @@ model DailyLogItem {
   order      Int
   source     String
 
-  dailyLog   DailyLog @relation(fields: [dailyLogId], references: [id], onDelete: Cascade)
-  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  dailyLog DailyLog @relation(fields: [dailyLogId], references: [id], onDelete: Cascade)
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 }
