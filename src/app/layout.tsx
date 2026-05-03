@@ -16,17 +16,30 @@ const dmSans = DM_Sans({
   weight: ["400", "500", "600"],
 });
 
+
+
 export const metadata: Metadata = {
   title: "DailyFit — Stay Strong",
   description: "Tracker latihan harian pribadi",
   icons: {
     icon: "/logo-trans.png",
   },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "DailyFit",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#C41230" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+      </head>
       <body className={`${barlowCondensed.variable} ${dmSans.variable} antialiased`}>
         <Providers>
           {children}
