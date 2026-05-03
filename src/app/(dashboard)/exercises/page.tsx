@@ -2,22 +2,35 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Dumbbell } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { ExerciseModal } from "@/components/exercise-modal";
 import { ExerciseCard } from "@/components/ExerciseCard";
-import { type Exercise } from "@/types";
+import { CATEGORY_LABEL, MUSCLE_GROUP_LABEL, type Exercise, type ExerciseCategory, type MuscleGroup } from "@/types";
+
+const ALL = "ALL";
 
 export default function ExercisesPage() {
   const qc = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Exercise | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [filterCategory, setFilterCategory] = useState<ExerciseCategory | typeof ALL>(ALL);
+  const [filterMuscle, setFilterMuscle] = useState<MuscleGroup | typeof ALL>(ALL);
 
   const { data, isLoading } = useQuery<Exercise[]>({
     queryKey: ["exercises"],
     queryFn: () => fetch("/api/exercises").then((r) => r.json()),
   });
+
+  const filtered = useMemo(() => {
+    if (!data) return [];
+    return data.filter((ex) => {
+      const catOk = filterCategory === ALL || ex.category === filterCategory;
+      const musOk = filterMuscle === ALL || ex.muscleGroup === filterMuscle;
+      return catOk && musOk;
+    });
+  }, [data, filterCategory, filterMuscle]);
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -28,8 +41,11 @@ export default function ExercisesPage() {
     qc.invalidateQueries({ queryKey: ["exercises"] });
   };
 
+  const hasFilter = filterCategory !== ALL || filterMuscle !== ALL;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* Header */}
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="text-[0.72rem] font-semibold tracking-[2.5px] uppercase mb-1" style={{ color: "#C41230" }}>
@@ -51,10 +67,64 @@ export default function ExercisesPage() {
         </button>
       </div>
 
+      {/* Filters */}
       {data?.length ? (
-        <p className="text-sm" style={{ color: "#888" }}>{data.length} latihan tersimpan</p>
+        <div className="space-y-3">
+          {/* Category filter */}
+          <div className="flex gap-2 flex-wrap">
+            <FilterChip
+              active={filterCategory === ALL}
+              onClick={() => setFilterCategory(ALL)}
+              label="Semua"
+            />
+            {(Object.entries(CATEGORY_LABEL) as [ExerciseCategory, string][]).map(([k, v]) => (
+              <FilterChip
+                key={k}
+                active={filterCategory === k}
+                onClick={() => setFilterCategory(filterCategory === k ? ALL : k)}
+                label={v}
+              />
+            ))}
+          </div>
+
+          {/* Muscle group filter */}
+          <div className="flex gap-2 flex-wrap">
+            <FilterChip
+              active={filterMuscle === ALL}
+              onClick={() => setFilterMuscle(ALL)}
+              label="Semua Otot"
+              secondary
+            />
+            {(Object.entries(MUSCLE_GROUP_LABEL) as [MuscleGroup, string][]).map(([k, v]) => (
+              <FilterChip
+                key={k}
+                active={filterMuscle === k}
+                onClick={() => setFilterMuscle(filterMuscle === k ? ALL : k)}
+                label={v}
+                secondary
+              />
+            ))}
+          </div>
+
+          {/* Result count + reset */}
+          <div className="flex items-center justify-between">
+            <p className="text-sm" style={{ color: "#888" }}>
+              {filtered.length} dari {data.length} latihan
+            </p>
+            {hasFilter && (
+              <button
+                onClick={() => { setFilterCategory(ALL); setFilterMuscle(ALL); }}
+                className="text-xs font-semibold transition"
+                style={{ color: "#C41230" }}
+              >
+                Reset filter
+              </button>
+            )}
+          </div>
+        </div>
       ) : null}
 
+      {/* Content */}
       {isLoading ? (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[...Array(3)].map((_, i) => (
@@ -80,9 +150,21 @@ export default function ExercisesPage() {
             <Plus className="h-4 w-4" /> Tambah Latihan
           </button>
         </div>
+      ) : !filtered.length ? (
+        <div className="rounded-2xl p-12 text-center space-y-3" style={{ border: "2px dashed rgba(0,0,0,0.08)" }}>
+          <p className="font-display text-xl" style={{ color: "#0F0A0B" }}>Tidak ada hasil</p>
+          <p className="text-sm" style={{ color: "#888" }}>Coba ubah filter kategori atau kelompok otot.</p>
+          <button
+            onClick={() => { setFilterCategory(ALL); setFilterMuscle(ALL); }}
+            className="text-sm font-semibold"
+            style={{ color: "#C41230" }}
+          >
+            Reset filter
+          </button>
+        </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {data.map((ex) => (
+          {filtered.map((ex) => (
             <ExerciseCard
               key={ex.id}
               exercise={ex}
@@ -130,5 +212,35 @@ export default function ExercisesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  label,
+  secondary = false,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+  secondary?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+      style={{
+        background: active
+          ? secondary ? "#0F0A0B" : "#C41230"
+          : "rgba(0,0,0,0.05)",
+        color: active ? "#fff" : "#888",
+        border: active
+          ? `1.5px solid ${secondary ? "#0F0A0B" : "#C41230"}`
+          : "1.5px solid transparent",
+      }}
+    >
+      {label}
+    </button>
   );
 }
