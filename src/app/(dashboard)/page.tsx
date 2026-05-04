@@ -35,8 +35,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Stats cards */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl border p-4 space-y-2 shadow-sm">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
             <TrendingUp className="h-3.5 w-3.5 text-primary-600" />
@@ -69,8 +68,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Quick links */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4">
         <Link
           href="/today"
           className="bg-white rounded-2xl border p-4 flex items-center gap-3 hover:shadow-md transition group shadow-sm"

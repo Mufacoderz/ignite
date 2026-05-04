@@ -67,7 +67,7 @@ export async function GET() {
 
   const topExercises = Object.values(exerciseCount)
     .sort((a, b) => b.count - a.count)
-    .slice(0, 3);
+    .slice(0, 10);
 
   // Category breakdown
   const categoryCount: Record<string, number> = {};
